@@ -61,9 +61,9 @@ jobs:
         " > docker-compose.temp.yml
         
         sshpass -p $VDS_PASSWORD ssh -o "StrictHostKeyChecking=no" $VDS_USER@$VDS_IP << 'EOF'
-          docker compose docker-compose.temp.yml pull
-          docker compose docker-compose.temp.yml down || true
-          docker compose docker-compose.temp.yml up -d
+          docker compose -f docker-compose.temp.yml pull
+          docker compose -f docker-compose.temp.yml down || true
+          docker compose -f docker-compose.temp.yml up -d
         EOF
 
   test_only:

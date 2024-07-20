@@ -49,11 +49,21 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y sshpass
+
+        echo "
+        version: '3'
+        services:
+          web:
+            image: $DOCKER_IMAGE
+            ports:
+              - '5000:5000'
+            environment:
+        " > docker-compose.temp.yml
         
         sshpass -p $VDS_PASSWORD ssh -o "StrictHostKeyChecking=no" $VDS_USER@$VDS_IP << 'EOF'
-          docker compose pull
-          docker compose down || true
-          docker compose up -d
+          docker compose docker-compose.temp.yml pull
+          docker compose docker-compose.temp.yml down || true
+          docker compose docker-compose.temp.yml up -d
         EOF
 
   test_only:

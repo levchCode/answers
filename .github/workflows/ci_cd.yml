@@ -42,7 +42,7 @@ jobs:
   
     - name: Deploy to VDS
       env:
-        DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/answer:${{ github.sha }}
+        DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/answers:${{ github.sha }}
         VDS_USER: ${{ secrets.VDS_USER }}
         VDS_PASSWORD: ${{ secrets.VDS_PASSWORD }}
         VDS_IP: ${{ secrets.VDS_IP }}

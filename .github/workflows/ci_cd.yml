@@ -50,8 +50,11 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y sshpass
         
-        sshpass -p $VDS_PASSWORD ssh -o StrictHostKeyChecking=no $VDS_USER@$VDS_IP \
-          "docker-compose pull && docker-compose down || true && docker-compose up -d"
+        sshpass -p $VDS_PASSWORD ssh -o "StrictHostKeyChecking=no" $VDS_USER@$VDS_IP << 'EOF'
+          docker-compose pull
+          docker-compose down || true
+          docker-compose up -d
+        EOF
 
   test_only:
     if: github.ref != 'refs/heads/main'

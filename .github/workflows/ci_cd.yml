@@ -47,16 +47,11 @@ jobs:
         VDS_PASSWORD: ${{ secrets.VDS_PASSWORD }}
         VDS_IP: ${{ secrets.VDS_IP }}
       run: |
-        # Install SSHpass to handle password authentication
         sudo apt-get update
         sudo apt-get install -y sshpass
         
-        # Use SSHpass to log in and deploy
-        sshpass -p $VDS_PASSWORD ssh -o StrictHostKeyChecking=no $VDS_USER@$VDS_IP << 'EOF'
-          docker-compose pull
-          docker-compose down || true
-          docker-compose up -d
-        EOF
+        sshpass -p $VDS_PASSWORD ssh -o StrictHostKeyChecking=no $VDS_USER@$VDS_IP \
+          "docker-compose pull && docker-compose down || true && docker-compose up -d"
 
   test_only:
     if: github.ref != 'refs/heads/main'

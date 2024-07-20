@@ -42,7 +42,7 @@ jobs:
   
     - name: Deploy to VDS
       env:
-        DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/answers:${{ github.sha }}
+        DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/answers:latest
         VDS_USER: ${{ secrets.VDS_USER }}
         VDS_PASSWORD: ${{ secrets.VDS_PASSWORD }}
         VDS_IP: ${{ secrets.VDS_IP }}
@@ -51,9 +51,9 @@ jobs:
         sudo apt-get install -y sshpass
 
         sshpass -p $VDS_PASSWORD ssh -o "StrictHostKeyChecking=no" $VDS_USER@$VDS_IP << 'EOF'
-          docker compose -f docker-compose.temp.yml pull
-          docker compose -f docker-compose.temp.yml down || true
-          docker compose -f docker-compose.temp.yml up -d
+          git pull https://github.com/levchCode/answers.git
+          cd answers
+          docker compose up -d
         EOF
 
   test_only:

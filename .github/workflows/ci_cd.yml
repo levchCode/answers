@@ -58,7 +58,7 @@ jobs:
             ports:
               - '5000:5000'
             environment:
-        " > docker-compose.temp.yml
+        " >> docker-compose.temp.yml
         
         sshpass -p $VDS_PASSWORD ssh -o "StrictHostKeyChecking=no" $VDS_USER@$VDS_IP << 'EOF'
           docker compose -f docker-compose.temp.yml pull

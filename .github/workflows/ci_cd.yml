@@ -44,7 +44,7 @@ jobs:
         sshpass -p $VDS_PASSWORD ssh -o "StrictHostKeyChecking=no" $VDS_USER@$VDS_IP << 'EOF'
           git clone https://github.com/levchCode/answers.git
           cd answers
-          docker compose up -d
+          docker compose up -d --build
         EOF
 
   test_only:

@@ -41,7 +41,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y sshpass
 
-        sshpass -p $VDS_PASSWORD ssh -o "StrictHostKeyChecking=no" $VDS_USER@$VDS_IP << 'EOF'
+        sshpass -p $VDS_PASSWORD ssh $VDS_USER@$VDS_IP << 'EOF'
           git clone https://github.com/levchCode/answers.git
           cd answers
           docker compose up -d --build

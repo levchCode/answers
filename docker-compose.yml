@@ -1,0 +1,66 @@
+name: answers
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
+    environment:
+      FLASK_ENV: development
+    ports:
+      - "8888:5000"
+    depends_on:
+      - db
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-retries: "5"
+        loki-batch-size: "400"
+
+  db:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: questions
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # Loki - система сбора и хранения логов
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ./loki-data:/loki  # для персистентности данных (опционально)
+
+  # Grafana - визуализация логов
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # пароль администратора
+      - GF_INSTALL_PLUGINS=grafana-lokiexplore-app  # плагин для Loki
+    volumes:
+      - ./grafana-data:/var/lib/grafana  # для персистентности данных
+      - ./grafana-provisioning:/etc/grafana/provisioning  # автоконфигурация
+    depends_on:
+      - loki
+
+volumes:
+  postgres_data:
+    driver: local
+  grafana-data:
+    driver: local
+  loki-data:
+    driver: local

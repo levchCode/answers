@@ -1,0 +1,6 @@
+/.pytest_cache
+/.vscode
+/__pycache__
+*.cpython-39*
+loki-data
+grafana-data
